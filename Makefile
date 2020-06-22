@@ -1,6 +1,7 @@
 ###############################################################################
 #	makefile
 #	 by Alex Chadwick
+#	 Source: https://www.cl.cam.ac.uk/projects/raspberrypi/tutorials/os/index.html
 #
 #	A makefile script for generation of raspberry pi kernel images.
 ###############################################################################
