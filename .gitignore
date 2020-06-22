@@ -1,0 +1,7 @@
+/.DS_Store
+/build
+/kernel.img
+/kernel.ld
+/kernel.list
+/kernel.map
+/make_and_copy.sh
