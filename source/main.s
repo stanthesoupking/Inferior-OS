@@ -6,6 +6,10 @@ _start:
 
 	@ Enable UART
 	bl EnableUART
+	
+	@ Set baudrate regulator to 3254; ~9600
+	ldr r0,=#3254
+	bl SetUARTBaudrateReg
 
 	@ Enable GPIO pin output
 	mov r0,#16
@@ -13,6 +17,10 @@ _start:
 	bl SetGPIOFunction
 
 main_loop$:
+	@ Write to UART
+	mov r0,#65
+	bl WriteUARTChar
+
 	@ Turn on LED
 	mov r0,#16
 	mov r1,#1

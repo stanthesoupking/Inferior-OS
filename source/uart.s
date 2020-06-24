@@ -16,7 +16,14 @@ GetAuxillaryAddress:
 EnableUART:
     push {lr}
 
-    @ TODO: Possibly set GPIO pin functions first?
+    @ Setup GPIO pins
+    mov r0,#14 @ TXD
+    mov r1,#2 @ ALT5 TXD1 (Mini UART)
+    bl SetGPIOFunction
+
+    mov r0,#15 @ RXD
+    mov r1,#2 @ ALT5 RXD1 (Mini UART)
+    bl SetGPIOFunction
 
     bl GetAuxillaryAddress
     auxAddr .req r0
@@ -51,4 +58,66 @@ DisableUART:
 
     .unreq auxAddr
     .unreq auxEnables
+    pop {pc}
+
+/**
+ * Sets the baudrate register to alter UART baudrate
+ * 
+ * Parameters:
+ *  r0 - Baudrate (0-65535)
+ */
+.globl SetUARTBaudrateReg
+SetUARTBaudrateReg:
+    @ Check if baudrate is valid
+    ldr r1,=#0xFFFF @ Max baudrate value
+    cmp r0,r1
+    movhi pc,lr
+
+    push {lr}
+
+    mov r1,r0
+    baudrate .req r1
+
+    bl GetAuxillaryAddress
+    auxAddr .req r0
+
+    @ Update AUX_MU_BAUD_REG
+    str baudrate,[auxAddr,#0x68]
+
+    .unreq baudrate 
+    .unreq auxAddr
+    pop {pc}
+
+/**
+ * Transmits a character using UART
+ * 
+ * Parameters:
+ *  r0 - Character (0 - 255)
+ */
+.globl WriteUARTChar
+WriteUARTChar:
+    cmp r0,#255
+    movhi pc,lr
+
+    mov r0,r1
+    char .req r1
+
+    push {lr}
+
+    bl GetAuxillaryAddress
+    auxAddr .req r0
+
+    @ Write character to AUX_MU_IO_REG
+    str char,[auxAddr,#0x40]
+
+    @ @ Enable transmit
+    @ flags .req r1
+
+    @ ldr flags,[auxAddr,#0x60]
+    @ orr flags,flags,#2
+    @ str flags,[auxAddr,#0x60]
+    
+    .unreq char
+    @ .unreq flags
+    .unreq auxAddr
     pop {pc}
