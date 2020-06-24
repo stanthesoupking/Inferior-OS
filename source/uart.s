@@ -99,7 +99,7 @@ WriteUARTChar:
     cmp r0,#255
     movhi pc,lr
 
-    mov r0,r1
+    mov r1,r0
     char .req r1
 
     push {lr}
@@ -109,15 +109,7 @@ WriteUARTChar:
 
     @ Write character to AUX_MU_IO_REG
     str char,[auxAddr,#0x40]
-
-    @ @ Enable transmit
-    @ flags .req r1
-
-    @ ldr flags,[auxAddr,#0x60]
-    @ orr flags,flags,#2
-    @ str flags,[auxAddr,#0x60]
     
     .unreq char
-    @ .unreq flags
     .unreq auxAddr
     pop {pc}
