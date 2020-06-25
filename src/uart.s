@@ -6,28 +6,28 @@
  * Returns
  *  r0 - Auxillary Peripheral Address
  */
-.globl GetAuxillaryPeripheralAddress
-GetAuxillaryAddress:
+.globl get_auxillary_peripheral_address
+get_auxillary_peripheral_address:
     ldr r0,=#0x20215000
     mov pc,lr
 
 /**
  * Enable Mini UART
  */
-.globl EnableUART
-EnableUART:
+.globl enable_mini_uart
+enable_mini_uart:
     push {lr}
 
     @ Setup GPIO pins
     mov r0,#14 @ TXD
     mov r1,#2 @ ALT5 TXD1 (Mini UART)
-    bl SetGPIOFunction
+    bl set_gpio_function
 
     mov r0,#15 @ RXD
     mov r1,#2 @ ALT5 RXD1 (Mini UART)
-    bl SetGPIOFunction
+    bl set_gpio_function
 
-    bl GetAuxillaryAddress
+    bl get_auxillary_peripheral_address
     auxAddr .req r0
 
     @ Read current value of AUX_ENABLES
@@ -43,11 +43,11 @@ EnableUART:
 /**
  * Disable Mini UART
  */
-.globl DisableUART
-DisableUART:
+.globl disable_mini_uart
+disable_mini_uart:
     push {lr}
 
-    bl GetAuxillaryAddress
+    bl get_auxillary_peripheral_address
     auxAddr .req r0
     add auxAddr, #4 @ Add AUX_ENABLES offset
 
@@ -67,8 +67,8 @@ DisableUART:
  * Parameters:
  *  r0 - Baudrate (0-65535)
  */
-.globl SetUARTBaudrateReg
-SetUARTBaudrateReg:
+.globl set_mini_uart_baudrate_reg
+set_mini_uart_baudrate_reg:
     @ Check if baudrate is valid
     ldr r1,=#0xFFFF @ Max baudrate value
     cmp r0,r1
@@ -79,7 +79,7 @@ SetUARTBaudrateReg:
     mov r1,r0
     baudrate .req r1
 
-    bl GetAuxillaryAddress
+    bl get_auxillary_peripheral_address
     auxAddr .req r0
 
     @ Update AUX_MU_BAUD_REG
@@ -95,8 +95,8 @@ SetUARTBaudrateReg:
  * Parameters:
  *  r0 - Character (0 - 255)
  */
-.globl WriteUARTChar
-WriteUARTChar:
+.globl write_mini_uart_char
+write_mini_uart_char:
     cmp r0,#255
     movhi pc,lr
 
@@ -105,7 +105,7 @@ WriteUARTChar:
 
     push {lr}
 
-    bl GetAuxillaryAddress
+    bl get_auxillary_peripheral_address
     auxAddr .req r0
 
     @ Write character to AUX_MU_IO_REG
@@ -122,8 +122,8 @@ WriteUARTChar:
  *  r0 - String
  *  r1 - String Length
  */
-.globl WriteUARTString
-WriteUARTString:
+.globl write_mini_uart_string
+write_mini_uart_string:
     mov r2,r0
     string .req r2
 
@@ -132,7 +132,7 @@ WriteUARTString:
 
     push {lr}
 
-    bl GetAuxillaryAddress
+    bl get_auxillary_peripheral_address
     auxAddr .req r0
 
     @ Write characters to AUX_MU_IO_REG

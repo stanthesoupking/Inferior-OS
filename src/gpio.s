@@ -6,8 +6,8 @@
  * Returns:
  *  r0 - GPIO Address
  */
-.globl GetGPIOAddress
-GetGPIOAddress:
+.globl get_gpio_address
+get_gpio_address:
     ldr r0,=0x20200000 @ GPIO Controller Address
 	@ Note: Actual addresses is offset by -0x5E000000 from BCM2835 documentation addresses
 	@ ~ Not sure why though...
@@ -15,7 +15,7 @@ GetGPIOAddress:
     mov pc,lr
 
 /**
- * void SetGPIOFunction(u32 pin, u32 function)
+ * void set_gpio_function(u32 pin, u32 function)
  *
  * Sets the function of the given pin number.
  * 
@@ -28,8 +28,8 @@ GetGPIOAddress:
  *  r0 - Pin Number (0-53)
  *  r1 - Function (0-7)
  */
-.globl SetGPIOFunction
-SetGPIOFunction:
+.globl set_gpio_function
+set_gpio_function:
     pinNum .req r4
     function .req r5
     mov pinNum,r0
@@ -44,7 +44,7 @@ SetGPIOFunction:
     @ Preserve lr
     push {lr}
 
-    bl GetGPIOAddress
+    bl get_gpio_address
     gpioAddr .req r0
 
     @ Get function select offset
@@ -84,7 +84,7 @@ SetGPIOFunction:
     pop {pc}
 
 /**
- * void SetGPIOValue(u32 pin, u32 value)
+ * void set_gpio_value(u32 pin, u32 value)
  *
  * Sets a GPIO pin to either on or off
  *
@@ -92,8 +92,8 @@ SetGPIOFunction:
  *  r0 - Pin Number (0-53)
  *  r1 - Value (0-1)
  */
-.globl SetGPIOValue
-SetGPIOValue:
+.globl set_gpio_value
+set_gpio_value:
     mov r4,r0
     mov r5,r1
     pinNum .req r4
@@ -107,7 +107,7 @@ SetGPIOValue:
 
     push {lr}
 
-    bl GetGPIOAddress
+    bl get_gpio_address
     gpioAddr .req r0
     add gpioAddr,gpioAddr,#0x1C @ output set
 

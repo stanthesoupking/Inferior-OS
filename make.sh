@@ -12,14 +12,14 @@ mkdir $BUILD
 # Create objects
 for file in $SOURCE/*.s; do
     name=${file##*/}
-    base=${name%.s}
-    arm-none-eabi-as -o $BUILD/$base.o $SOURCE/$name
+    out=${name%.s}_asm.o
+    arm-none-eabi-as -o $BUILD/$out $SOURCE/$name
 done
 
 for file in $SOURCE/*.c; do
     name=${file##*/}
-    base=${name%.c}
-    arm-none-eabi-gcc -I $INCLUDE $SOURCE/$name -c -o $BUILD/$base.o 
+    out=${name%.c}_c.o
+    arm-none-eabi-gcc -I $INCLUDE $SOURCE/$name -c -o $BUILD/$out
 done
 
 
