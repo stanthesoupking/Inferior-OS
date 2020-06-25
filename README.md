@@ -1,7 +1,7 @@
 # Inferior OS
 Messing around with ARM assembly on a Raspberry Pi.
 
-Note: only Raspberry Pi model 1B is supported currently.
+Note: only Raspberry Pi models 1B and Zero are supported currently.
 
 ## Building
 In order to compile you'll either need access to an ARM system or a [cross-assemler](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads).
