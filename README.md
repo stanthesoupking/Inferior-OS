@@ -8,7 +8,7 @@ In order to compile you'll either need access to an ARM system or a [cross-assem
 
 To compile, run the following from the project's root directory.
 ```
-make
+./make.sh
 ```
 
 ## Installation

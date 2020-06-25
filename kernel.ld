@@ -1,6 +1,7 @@
 /******************************************************************************
 *	kernel.ld
 *	 by Alex Chadwick
+*    modified by Stanley Fuller
 *
 *	A linker script for generation of raspberry pi kernel images.
 ******************************************************************************/
@@ -27,6 +28,13 @@ SECTIONS {
 	*/
 	.data : {
 		*(.data)
+	}
+
+	/* 
+	* Next put read-only data
+	*/
+	.rodata : {
+		*(.rodata)
 	}
 
 	/*
