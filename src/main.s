@@ -1,9 +1,5 @@
 .section .init
 
-@ .globl _start
-@ _start:
-@ 	b main
-
 .globl main
 main:
 	mov sp,#0x8000
@@ -27,35 +23,10 @@ main_loop$:
 	sub r1,r1,r0
 	bl WriteUARTString
 
+	@ Execute test C function
 	bl test
 
-@ 	@ Turn on LED
-@ 	mov r0,#16
-@ 	mov r1,#1
-@ 	bl SetGPIOValue
-
-@ 	mov r2,#0x3F0000
-@ delay$:
-@ 	sub r2,#1
-@ 	cmp r2,#0
-@ 	bne delay$
-
-@ 	@ Turn off LED
-@ 	mov r0,#16
-@ 	mov r1,#0
-@ 	bl SetGPIOValue
-
-@ 	mov r2,#0x3F0000
-@ delay2$:
-@ 	sub r2,#1
-@ 	cmp r2,#0
-@ 	bne delay2$
-
 	b main_loop$ 
-
-.globl exit
-exit:
-	nop
 
 .section .data
 msg: .ascii "Hello from assembly!\n\r"
