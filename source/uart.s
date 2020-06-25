@@ -1,3 +1,5 @@
+.section .text
+
 /**
  * Get the auxillary peripheral address
  *
@@ -27,13 +29,12 @@ EnableUART:
 
     bl GetAuxillaryAddress
     auxAddr .req r0
-    add auxAddr, #4 @ Add AUX_ENABLES offset
 
     @ Read current value of AUX_ENABLES
     auxEnables .req r2
-    ldr auxEnables,[auxAddr]
+    ldr auxEnables,[auxAddr,#4] @ AUX_ENABLES offset
     orr auxEnables,#1 @ Set Mini UART enable = 1
-    str auxEnables,[auxAddr]
+    str auxEnables,[auxAddr,#4]
 
     .unreq auxAddr
     .unreq auxEnables
@@ -111,5 +112,52 @@ WriteUARTChar:
     str char,[auxAddr,#0x40]
     
     .unreq char
+    .unreq auxAddr
+    pop {pc}
+
+/**
+ * Transmits a string using UART
+ * 
+ * Parameters:
+ *  r0 - String
+ *  r1 - String Length
+ */
+.globl WriteUARTString
+WriteUARTString:
+    mov r2,r0
+    string .req r2
+
+    mov r3,r1
+    len .req r3
+
+    push {lr}
+
+    bl GetAuxillaryAddress
+    auxAddr .req r0
+
+    @ Write characters to AUX_MU_IO_REG
+    char .req r4
+    index .req r5
+    mov index,#0
+    write_loop$:
+        ldr char,[string]
+
+        @ Wait until transmit buffer has enough space for a character
+        buffer_space_loop$:
+            ldr r6,[auxAddr,#0x54] @ AUX_MU_LSR_REG
+            and r6,r6,#32 @ Transmitter empty (can accept at least 1 byte)
+            cmp r6,#32
+            bne buffer_space_loop$
+
+        str char,[auxAddr,#0x40]
+        add string,string,#1
+        add index,index,#1
+
+        cmp len,index
+        bne write_loop$
+    
+    .unreq char
+    .unreq index
+    .unreq len
     .unreq auxAddr
     pop {pc}

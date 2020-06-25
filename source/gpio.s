@@ -1,3 +1,5 @@
+.section .text
+
 /**
  * Gets the offset of the GPIO address
  *

@@ -1,6 +1,6 @@
 .section .init
-.globl _start
 
+.globl _start
 _start:
 	mov sp,#0x8000
 
@@ -18,8 +18,11 @@ _start:
 
 main_loop$:
 	@ Write to UART
-	mov r0,#65
-	bl WriteUARTChar
+	ldr r0,=msg
+	@ ldr r1,=#100
+	ldr r1,=msg_len
+	sub r1,r1,r0
+	bl WriteUARTString
 
 	@ Turn on LED
 	mov r0,#16
@@ -45,6 +48,7 @@ delay2$:
 
 	b main_loop$ 
 
-	@ Infinite loop
-loop$:
-	b loop$
+
+.section .data
+msg: .ascii "Hello World.\n\r"
+msg_len:
