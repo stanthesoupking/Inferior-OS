@@ -41,9 +41,9 @@ EnableUART:
     pop {pc}
 
 /**
- * Enable Mini UART
+ * Disable Mini UART
  */
-.globl EnableUART
+.globl DisableUART
 DisableUART:
     push {lr}
 
