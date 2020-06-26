@@ -19,6 +19,13 @@ SECTIONS {
 	/* 
 	* Next we put the rest of the code.
 	*/
+	.text.startup : {
+		*(.text.startup)
+	}
+
+	/* 
+	* Next we put the rest of the code.
+	*/
 	.text : {
 		*(.text)
 	}
@@ -35,6 +42,13 @@ SECTIONS {
 	*/
 	.rodata : {
 		*(.rodata)
+	}
+
+	/* 
+	* Next put read-only data
+	*/
+	.rodata.str1.4 : {
+		*(.rodata.str1.4)
 	}
 
 	/*

@@ -32,4 +32,4 @@ struct frame_buffer_info_type frame_buffer_info;
  */
 struct frame_buffer_info_type* initialise_frame_buffer(int width, int height, int bit_depth);
 
-void test_render();
+void set_framebuffer_pixel_32(int pixelX, int pixelY, int pixelValue);

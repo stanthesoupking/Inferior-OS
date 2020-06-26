@@ -1,5 +1,5 @@
 .section .data
-.align 4
+.align 12
 .globl frame_buffer_info
 frame_buffer_info:
 .int 1024   @ #0 Physical Width
@@ -77,33 +77,41 @@ initialise_frame_buffer:
     .unreq result
     .unreq fbInfoAddr
 
-.globl test_render
-test_render:
-    push {lr}
+/**
+ * Set a framebuffer pixel's value.
+ *
+ * Parameter:
+ *  r0 - X
+ *  r1 - Y
+ *  r2 - Value 
+ * 
+ */
+.globl set_framebuffer_pixel_32
+set_framebuffer_pixel_32:
+    pixelX .req r0
+    pixelY .req r1
+    pixelVal .req r2
 
     fbInfoAddr .req r6
     ldr fbInfoAddr,=frame_buffer_info
 
-    fbAddr .req r3
-    ldr fbAddr,[fbInfoAddr,#32]
+    fbPointer .req r3
+    ldr fbPointer,[fbInfoAddr,#32]
+    
+    @ Get current pixel segment value
+    ldr r4,[fbInfoAddr] @ Load width
+    mul r5,pixelY,r4
+    add r5,pixelX
+    lsl r5,#2 @ Times by 4
+    add r5,fbPointer
 
-    colour .req r0
-    y .req r1
-    mov y,#480
-    drawRow$:
-        x .req r2
-        mov x,#800
-        drawPixel$:
-            strh colour,[fbAddr]
-            add fbAddr,#2
-            sub x,#1
-            teq x,#0
-            bne drawPixel$
-        sub y,#1
-        add colour,#1
-        teq y,#0
-        bne drawRow$
+    @ Update pixel
+    str pixelVal,[r5]
 
-    .unreq fbAddr
     .unreq fbInfoAddr
-    pop {pc}
+    .unreq fbPointer
+    .unreq pixelX
+    .unreq pixelY
+    .unreq pixelVal
+    mov pc,lr
+    

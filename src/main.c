@@ -15,7 +15,7 @@ void main()
     debug_trace("\n\r", 2);
 
     debug_trace("Creating frame buffer.\n\r", 24);
-    struct frame_buffer_info_type *fb_info = initialise_frame_buffer(800, 480, 16);
+    struct frame_buffer_info_type *fb_info = initialise_frame_buffer(800, 480, 32);
 
     if (!fb_info)
     {
@@ -25,7 +25,23 @@ void main()
 
     debug_trace("Frame buffer creation was successful.\n\r", 40);
 
+    while(1) {
+        for (int x = 0; x < 800; x++)
+        {
+            for (int y = 0; y < 480; y++)
+            {
+                set_framebuffer_pixel_32(x, y, 0x00FF0000); // Red
+            }
+        }
+
+        for (int x = 0; x < 800; x++)
+        {
+            for (int y = 0; y < 480; y++)
+            {
+                set_framebuffer_pixel_32(x, y, 0x0000FF00); // Green
+            }
+        }
+    }
     // Do test render
-    test_render();
-    debug_trace("Finished test render.\n\r", 23);
+    // debug_trace("Finished test render.\n\r", 23);
 }
