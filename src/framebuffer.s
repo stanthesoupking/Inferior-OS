@@ -114,4 +114,41 @@ set_framebuffer_pixel_32:
     .unreq pixelY
     .unreq pixelVal
     mov pc,lr
-    
+
+
+/**
+ * Fill frame buffer with the given pixel value
+ *
+ * Parameter:
+ *  r0 - Value
+ */
+.globl clear_framebuffer_32
+clear_framebuffer_32:
+    pixelVal .req r0
+
+    fbInfoAddr .req r6
+    ldr fbInfoAddr,=frame_buffer_info
+
+    fbPointer .req r3
+    ldr fbPointer,[fbInfoAddr,#32]
+
+    totalPixels .req r8
+    ldr r2,[fbInfoAddr] @ Width
+    ldr r4,[fbInfoAddr,#4] @ Height
+    mul totalPixels,r2,r4
+
+    clearloop$:
+        cmp totalPixels,#0
+        beq clearloop_end$
+
+        str pixelVal,[fbPointer]
+        add fbPointer,#4
+        sub totalPixels,#1
+        b clearloop$
+    clearloop_end$:
+
+    .unreq fbInfoAddr
+    .unreq fbPointer
+    .unreq totalPixels
+    .unreq pixelVal
+    mov pc,lr

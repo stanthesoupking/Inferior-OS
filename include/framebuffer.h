@@ -32,4 +32,20 @@ struct frame_buffer_info_type frame_buffer_info;
  */
 struct frame_buffer_info_type* initialise_frame_buffer(int width, int height, int bit_depth);
 
+/**
+ * Set a pixel (32 bit framebuffer)
+ * 
+ * Parameters:
+ *  pixelX - X coordinate of pixel
+ *  pixelY - Y coordinate of pixel
+ *  pixelValue - Value to insert at given pixel coordinates
+ */
 void set_framebuffer_pixel_32(int pixelX, int pixelY, int pixelValue);
+
+/**
+ * Clear framebuffer with the given pixel value (32 bit framebuffer)
+ * 
+ * Parameters:
+ *  pixelValue - Value to fill framebuffer with
+ */
+void clear_framebuffer_32(int pixelValue);

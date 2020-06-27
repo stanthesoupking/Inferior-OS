@@ -25,23 +25,28 @@ void main()
 
     debug_trace("Frame buffer creation was successful.\n\r", 40);
 
-    while(1) {
-        for (int x = 0; x < 800; x++)
+    int squareX = 0;
+    int squareY = 200;
+
+    while (1)
+    {
+        // Clear screen
+        clear_framebuffer_32(0x00000000);
+
+        // Draw square
+        for (int x = 0; x < 32; x++)
         {
-            for (int y = 0; y < 480; y++)
+            for (int y = 0; y < 32; y++)
             {
-                set_framebuffer_pixel_32(x, y, 0x00FF0000); // Red
+                set_framebuffer_pixel_32(x + squareX, y + squareY, 0x00FF0000);
             }
         }
 
-        for (int x = 0; x < 800; x++)
-        {
-            for (int y = 0; y < 480; y++)
-            {
-                set_framebuffer_pixel_32(x, y, 0x0000FF00); // Green
-            }
-        }
+        // Artificial delay
+        for(int i = 0; i < 100000; i++) { }
+
+        // Move square
+        squareX += 5;
+        squareX = squareX % 600;
     }
-    // Do test render
-    // debug_trace("Finished test render.\n\r", 23);
 }
